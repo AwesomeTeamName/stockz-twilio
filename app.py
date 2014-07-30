@@ -50,7 +50,7 @@ def get_error(name):
 		raise TypeError('name must be a string')
 
 	if name in config['errors']:
-		return config['errors']['name']
+		return config['errors'][name]
 
 	return config['errors']['default']
 
