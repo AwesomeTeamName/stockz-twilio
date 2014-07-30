@@ -18,6 +18,12 @@ if 'flask' not in config or not isinstance(config['flask'], dict):
 if 'client' not in config or not isinstance(config['client'], dict):
 	raise Exception('Missing client from config')
 
+if 'errors' not in config or not isinstance(config['errors'], dict):
+	raise Exception('Missing errors from config')
+
+if 'default' not in config['errors'] or not isinstance(config['errors']['default'], basestring):
+	raise Exception('Missing default error from config')
+
 # Application #
 
 app = Flask(__name__)
@@ -33,10 +39,25 @@ client = StockzClient(**config['client'])
 
 # Routes #
 
+def get_response(message):
+	if not isinstance(message, basestring):
+		raise TypeError('message must be a string')
+
+	return twiml.response(twiml.message(message))
+
+def get_error(name):
+	if not isinstance(name, basestring):
+		raise TypeError('name must be a string')
+
+	if name in config['errors']:
+		return config['errors']['name']
+
+	return config['errors']['default']
+
 @app.route('/sms', methods = ['GET', 'POST'])
 def twilio():
 	if 'From' not in request.form or 'Body' not in request.form:
-		return twiml.response(twiml.message('Invalid action. Reply \'help\' for a list of actions.'))
+		return get_response(get_error('default'))
 
 	sender = request.form['From']
 	body = request.form['Body']
@@ -44,7 +65,7 @@ def twilio():
 	response = client.execute(body)
 
 	if response is None:
-		return twiml.response(twiml.message('Invalid action. Reply \'help\' for a list of actions.'))
+		return get_response(get_error('InvalidActionError'))
 
 	return twiml.response(twiml.message(response))
 
