@@ -35,11 +35,8 @@ client = StockzClient(**config['client'])
 
 @app.route('/sms', methods = ['GET', 'POST'])
 def twilio():
-	if 'From' not in request.form:
-		return twiml.response(twiml.message('Missing From parameter'))
-
-	if 'Body' not in request.form:
-		return twiml.response(twiml.message('Missing Body parameter'))
+	if 'From' not in request.form or 'Body' not in request.form:
+		return twiml.response(twiml.message('Invalid action. Reply \'help\' for a list of actions.'))
 
 	sender = request.form['From']
 	body = request.form['Body']
