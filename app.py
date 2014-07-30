@@ -37,7 +37,7 @@ app.secret_key = os.urandom(16)
 
 client = StockzClient(**config['client'])
 
-# Routes #
+# Functions #
 
 def get_response(message):
 	if not isinstance(message, basestring):
@@ -54,6 +54,8 @@ def get_error(name):
 
 	return config['errors']['default']
 
+# Routes #
+
 @app.route('/sms', methods = ['GET', 'POST'])
 def twilio():
 	if 'From' not in request.form or 'Body' not in request.form:
@@ -66,6 +68,11 @@ def twilio():
 
 	if response is None:
 		return get_response(get_error('InvalidActionError'))
+
+	split = response.split()
+
+	if split[0] == 'error':
+		return get_response(get_error(split[1]))
 
 	return twiml.response(twiml.message(response))
 
