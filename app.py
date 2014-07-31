@@ -1,6 +1,5 @@
 import yaml, os, twiml
 from flask import Flask, request
-from client import StockzClient
 
 # Application #
 
