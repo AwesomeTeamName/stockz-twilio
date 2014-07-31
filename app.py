@@ -24,7 +24,7 @@ def get_response(message):
 
 # Routes #
 
-@app.route('/sms', methods = ['GET', 'POST'])
+@app.route('/sms', methods = ['POST'])
 def twilio():
 	return get_response('Hello, user!')
 
