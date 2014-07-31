@@ -57,9 +57,9 @@ def twilio():
 	else:
 		data = None
 
-	response = client.send_request()
+	response = client.send_request(action, sender, data)
 
-	return get_response('Hello, user!')
+	return get_response(response)
 
 # Server #
 
