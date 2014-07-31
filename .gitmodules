@@ -1,0 +1,3 @@
+[submodule "stockz-client"]
+	path = client
+	url = git@github.com:AwesomeTeamName/stockz-client.git
