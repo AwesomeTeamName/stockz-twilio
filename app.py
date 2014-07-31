@@ -13,7 +13,7 @@ app.secret_key = os.urandom(16)
 
 # Client #
 
-client = StockzClient(**config['client'])
+client = StockzClient()
 
 # Functions #
 
@@ -32,4 +32,4 @@ def twilio():
 # Server #
 
 if __name__ == '__main__':
-	app.run(**config['flask'])
+	app.run(host = '0.0.0.0', debug = True)
