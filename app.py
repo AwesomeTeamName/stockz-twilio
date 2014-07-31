@@ -1,6 +1,6 @@
-import yaml, os, twiml
+import os, twiml
 from client import StockzClient
-from flask import Flask, request
+from flask import Flask, request, abort
 
 # Application #
 
@@ -10,10 +10,6 @@ app.jinja_env.trim_blocks = True
 app.jinja_env.lstrip_blocks = True
 
 app.secret_key = os.urandom(16)
-
-# Errors #
-
-errors = yaml.load(open('errors.yml', 'r'))
 
 # Client #
 
@@ -27,27 +23,18 @@ def get_response(message):
 
 	return twiml.response(twiml.message(message))
 
-def get_message(name):
-	if not isinstance(errors, dict):
-		return 'Unknown error.'
-
-	if not name in errors['errors']:
-		return 'Unknown error.'
-
-	return str(errors['errors'][name])
-
 # Routes #
 
 @app.route('/sms', methods = ['POST'])
 def twilio():
 	if not 'From' in request.form or not 'Body' in request.form:
-		return get_message('internal_error')
+		abort(500)
 
 	sender = request.form['From']
 	body = request.form['Body']
 
 	if len(body) == 0:
-		return get_message('internal_error')
+		abort(500)
 
 	body_split = body.split()
 	action = body_split[0]
