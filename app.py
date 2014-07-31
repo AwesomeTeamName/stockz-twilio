@@ -30,7 +30,7 @@ def twilio():
 	if not 'From' in request.form or not 'Body' in request.form:
 		abort(500)
 
-	sender = request.form['From']
+	sender = request.form['From'].replace(' ', '')
 	body = request.form['Body']
 
 	if len(body) == 0:
