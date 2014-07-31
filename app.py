@@ -10,10 +10,6 @@ app.jinja_env.lstrip_blocks = True
 
 app.secret_key = os.urandom(16)
 
-# Client #
-
-client = StockzClient()
-
 # Functions #
 
 def get_response(message):
