@@ -1,0 +1,3 @@
+errors:
+    internal_error: 'Internal error.'
+    invalid_action: 'Invalid action.'
